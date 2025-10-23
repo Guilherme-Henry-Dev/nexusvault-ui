@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { Link } from "react-router-dom";
+import { useTheme } from "../hooks/useTheme"
 
-interface Game{
-    id: number;
-    title: string;
-    genre: string;
-    platform: string;
-    rating: number;
+interface Game {
+  id: number;
+  title: string;
+  genre: string;
+  platform: string;
+  rating: number;
 }
 
-export function Dashboard () {
-    const [games, setGames] = useState<Game[]>([])
+export function Dashboard() {
+  const [games, setGames] = useState<Game[]>([])
 
   useEffect(() => {
     async function fetchGames() {
@@ -27,6 +28,14 @@ export function Dashboard () {
 
   return (
     <div className="min-h-screen bg-primary text-text p-6">
+
+      <button
+        onClick={toggle}
+        className="absolute top-6 right-6 bg-accent px-3 py-2 rounded text-sm font-semibold hover:bg-opacity-80 transition"
+      >
+        {theme === "dark" ? "☀️ Claro" : "🌙 Escuro"}
+      </button>
+
       <h1 className="text-3xl font-bold mb-6">Minha Biblioteca</h1>
       {games.length === 0 ? (
         <p className="text-gray-400">Nenhum jogo cadastrado ainda.</p>

@@ -14,7 +14,7 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
     return auth?.user ? children : <Navigate to="/login" replace/>
 }
 
-function App() {
+export function App() {
     return (
     <BrowserRouter>
       <Routes>

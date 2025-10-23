@@ -1,35 +1,66 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
-import axios from "../services/api";
+import { createContext, useState, useEffect, ReactNode } from "react"
+import api from "../services/api"
 
-interface AuthContextProps {
-    user: any
-    login: (email: string, password: string) => Promise<void>
-    logout: () => Promise<void>
-    register: (data: any) => Promise<void>
+interface User {
+  id?: number
+  name?: string
+  email?: string
+  token?: string
 }
 
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+interface AuthContextProps {
+  user: User | null
+  login: (email: string, password: string) => Promise<void>
+  logout: () => void
+  register: (data: any) => Promise<void>
+  isAuthenticated: boolean
+}
 
-export function AuthProvider({ children }: {children: ReactNode}){
-    const [user, setUser] = useState<any>(null)
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
-    async function register(data:any) {
-        await axios.post("/auth/register", data)
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+
+
+  async function login(email: string, password: string) {
+    try {
+      const res = await api.post("/auth/login", { email, password })
+      const { token, user } = res.data
+      localStorage.setItem("token", token)
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+      setUser(user)
+    } catch (error) {
+      console.error("Erro ao fazer login:", error)
     }
+  }
 
-    function logout() {
-        localStorage.removeItem("token")
-        setUser(null)
+
+  async function register(data: any) {
+    try {
+      await api.post("/auth/register", data)
+    } catch (error) {
+      console.error("Erro ao registrar:", error)
     }
+  }
 
-    useEffect(() => {
-        const token = localStorage.getItem("toke")
-        if (token) setUser({ token })
-    }, []) 
+  function logout() {
+    localStorage.removeItem("token")
+    setUser(null)
+  }
 
-    return(
-        <AuthContext.Provider value={{ user, login, logout, register}}>
-            {children}
-        </AuthContext.Provider>
-    )
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+      setUser({ token })
+    }
+  }, [])
+
+  return (
+    <AuthContext.Provider
+      value={{ user, login, logout, register, isAuthenticated: !!user }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
 }

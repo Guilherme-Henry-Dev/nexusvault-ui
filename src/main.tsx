@@ -1,10 +1,16 @@
-import { React, StrictMode } from 'react'
-import { ReactDOM, createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import { AuthProvider } from './contexts/AuthContext.tsx'
-import './styles/index.css'
+import React from "react"
+import ReactDOM from "react-dom/client"
+import App from "./App"
+import { AuthProvider } from "./contexts/AuthContext"
+import "./styles/index.css"
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")
+
+if (!rootElement) {
+  throw new Error("Elemento root não encontrado no index.html")
+}
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <AuthProvider>
       <App />

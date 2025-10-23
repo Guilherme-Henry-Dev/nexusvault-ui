@@ -18,7 +18,7 @@ export function Register () {
         try {
             await auth?.register(data)
             alert("Cadastro realizado com sucesso!")
-        } catch () {
+        } catch (error) {
             alert("Erro ao registrar.")
         }    
     }

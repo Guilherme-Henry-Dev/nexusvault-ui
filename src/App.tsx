@@ -6,6 +6,8 @@ import { GameDetails } from "./pages/GameDetails"
 import { Home } from "./pages/Home"
 import { useContext } from "react"
 import { AuthContext } from "./contexts/AuthContext"
+import type { JSX } from "react/jsx-runtime"
+import { AddGame } from "./pages/AddGame"
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
     const auth = useContext(AuthContext)
@@ -19,6 +21,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/add-game" element={<AddGame />} />
         <Route
           path="/dashboard"
           element={

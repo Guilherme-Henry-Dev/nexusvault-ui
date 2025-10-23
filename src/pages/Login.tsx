@@ -10,7 +10,7 @@ const schema = z.object({
     password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
 })
 
-export function login() {
+export function Login() {
     const { register, handleSubmit } = useForm({ resolver: zodResolver(schema) })
     const auth = useContext(AuthContext)
 

@@ -12,6 +12,7 @@ interface Game {
 }
 
 export function Dashboard() {
+  const { theme, toggle } = useTheme();
   const [games, setGames] = useState<Game[]>([])
 
   useEffect(() => {

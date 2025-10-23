@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom"
 import { div } from "framer-motion/client";
 
 const schema = z.object({
@@ -12,14 +13,16 @@ const schema = z.object({
 
 export function Login() {
     const { register, handleSubmit } = useForm({ resolver: zodResolver(schema) })
+    const navigate = useNavigate()
     const auth = useContext(AuthContext)
 
-    const onSubmit = async (data: any) => {
-        try {
-            await auth?.login(data.email, data.password)
-            alert("Login realiazado com sucesso!")
-        } catch {
-            alert("Falha no login.")
+    async function onSubmit(data: { email: string; password: string }) {
+        const ok = await auth.login(data.email, data.password)
+        if (ok) {
+            alert("Login realizado com sucesso!")
+            navigate("/dashboard")
+        } else {
+            alert("Credenciais inválidas ou erro na API.")
         }
     }
 

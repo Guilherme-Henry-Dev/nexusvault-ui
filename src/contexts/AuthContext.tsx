@@ -1,78 +1,65 @@
-import { createContext, useState, useEffect, ReactNode } from "react"
-import api from "../services/api"
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
-interface User {
-  id?: number
-  name?: string
-  email?: string
-}
+type AuthContextType = {
+  token: string | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => void;
+};
 
-interface AuthContextProps {
-  user: User | null
-  isAuthenticated: boolean
-  loading: boolean
-  login: (email: string, password: string) => Promise<boolean>
-  logout: () => void
-  register: (data: { name: string; email: string; password: string }) => Promise<boolean>
-}
+const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthContext = createContext<AuthContextProps | undefined>(undefined)
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [token, setToken] = useState<string | null>(localStorage.getItem("@nv:token"));
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) {
-      api.defaults.headers.common.Authorization = `Bearer ${token}`
-      setUser({ email: "persisted" })
-    }
-    setLoading(false)
-  }, [])
+    if (token) localStorage.setItem("@nv:token", token);
+    else localStorage.removeItem("@nv:token");
+  }, [token]);
 
-  async function login(email: string, password: string) {
+  const login = async (email: string, password: string) => {
+    setLoading(true);
     try {
-      if (!email || !password) throw new Error("missing credentials")
-
-      const res = await api.post("/auth/login", { email, password })
-      const { token, user } = res.data || {}
-      if (!token || !user) {
-        console.error("Resposta inesperada do /auth/login:", res.data)
-        return false
-      }
-
-      localStorage.setItem("token", token)
-      api.defaults.headers.common.Authorization = `Bearer ${token}`
-      setUser(user)
-      return true
-    } catch (err: any) {
-      console.error("Erro no login:", err?.response?.status, err?.response?.data || err?.message)
-      return false
+      const { data } = await api.post("/auth/login", { email, password });
+      setToken(data.token);
+      navigate("/dashboard");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  async function register(data: { name: string; email: string; password: string }) {
+  const register = async (name: string, email: string, password: string) => {
+    setLoading(true);
     try {
-      const res = await api.post("/auth/register", data)
-      return res.status >= 200 && res.status < 300
-    } catch (err: any) {
-      console.error("Erro no register:", err?.response?.status, err?.response?.data || err?.message)
-      return false
+      await api.post("/auth/register", { name, email, password });
+      const { data } = await api.post("/auth/login", { email, password });
+      setToken(data.token);
+      navigate("/dashboard");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  function logout() {
-    localStorage.removeItem("token")
-    delete api.defaults.headers.common.Authorization
-    setUser(null)
-  }
+  const logout = () => {
+    setToken(null);
+    navigate("/login");
+  };
 
-  return (
-    <AuthContext.Provider
-      value={{ user, isAuthenticated: !!user, loading, login, logout, register }}
-    >
-      {children}
-    </AuthContext.Provider>
-  )
+  const value = useMemo(
+    () => ({ token, loading, login, register, logout }),
+    [token, loading]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth deve ser usado dentro de <AuthProvider />");
+  return ctx;
+};

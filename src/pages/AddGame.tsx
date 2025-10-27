@@ -1,45 +1,66 @@
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import api from "../services/api"
+import { useState } from "react"
+import axios from "axios"
 import { useNavigate } from "react-router-dom"
-
-const schema = z.object({
-  title: z.string().min(2),
-  genre: z.string().min(2),
-  platform: z.string().min(2),
-  rating: z.number().min(0).max(10),
-  review: z.string().optional(),
-})
 
 export function AddGame() {
   const navigate = useNavigate()
-  const { register, handleSubmit, reset } = useForm({
-    resolver: zodResolver(schema),
-  })
+  const [title, setTitle] = useState("")
+  const [genre, setGenre] = useState("")
+  const [releaseYear, setReleaseYear] = useState("")
 
-  async function onSubmit(data: any) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
     try {
-      await api.post("/games", data)
-      alert("Jogo adicionado com sucesso!")
-      reset()
+      await axios.post("https://nexusvault-api.onrender.com/games", {
+        title,
+        genre,
+        releaseYear: parseInt(releaseYear),
+      })
       navigate("/dashboard")
-    } catch (err) {
-      alert("Erro ao adicionar jogo.")
-      console.error(err)
+    } catch (error) {
+      console.error("Erro ao adicionar jogo:", error)
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-primary text-text">
-      <h1 className="text-3xl font-bold mb-6">Adicionar novo jogo</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-80">
-        <input {...register("title")} placeholder="Título" className="p-2 rounded bg-secondary" />
-        <input {...register("genre")} placeholder="Gênero" className="p-2 rounded bg-secondary" />
-        <input {...register("platform")} placeholder="Plataforma" className="p-2 rounded bg-secondary" />
-        <input {...register("rating", { valueAsNumber: true })} placeholder="Nota (0 a 10)" className="p-2 rounded bg-secondary" />
-        <textarea {...register("review")} placeholder="Review (opcional)" className="p-2 rounded bg-secondary h-24" />
-        <button className="bg-accent py-2 rounded font-semibold hover:bg-opacity-80 transition">
+    <div className="min-h-screen bg-[#0b0e16] flex items-center justify-center text-white">
+      
+      
+      
+      
+      <form
+        onSubmit={handleSubmit}
+        className="bg-[#161b27] p-8 rounded-xl shadow-lg w-96 space-y-4"
+      >
+        <h2 className="text-2xl font-bold text-center">Adicionar Novo Jogo</h2>
+
+        <input
+          type="text"
+          placeholder="Título"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
+        />
+        <input
+          type="text"
+          placeholder="Gênero"
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+          className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
+        />
+        <input
+          type="number"
+          placeholder="Ano de lançamento"
+          value={releaseYear}
+          onChange={(e) => setReleaseYear(e.target.value)}
+          className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 p-2 rounded-lg font-medium transition-colors"
+        >
           Salvar
         </button>
       </form>

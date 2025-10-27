@@ -3,7 +3,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import  Home  from "./pages/Home";
 import  Login  from "./pages/Login";
 import  Register  from "./pages/Register";
-import { AddGame } from "./pages/AddGame";
+import  AddGame  from "./pages/AddGame";
 import  Dashboard  from "./pages/DashBoard";
 import PrivateRoute from "./routes/PrivateRoute";
 import "./styles/index.css";

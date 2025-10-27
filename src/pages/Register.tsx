@@ -1,39 +1,27 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
-const schema = z.object({
-    name: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
-    email: z.string().email(),
-    password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
-})
+type Form = { name: string; email: string; password: string };
 
-export function Register () {
-    const { register, handleSubmit } = useForm({ resolver: zodResolver(schema)})
-    const auth = useContext(AuthContext)
+export default function Register() {
+  const { register: reg, handleSubmit } = useForm<Form>();
+  const { register: signup, loading } = useAuth();
 
-    const onSubmit = async (data:any) => {
-        try {
-            await auth?.register(data)
-            alert("Cadastro realizado com sucesso!")
-        } catch (error) {
-            alert("Erro ao registrar.")
-        }    
-    }
+  const onSubmit = async (data: Form) => {
+    await signup(data.name, data.email, data.password);
+  };
 
-    return (
-    <div className="flex flex-col items-center justify-center h-screen text-center">
-      <h1 className="text-3xl font-bold mb-4">Crie sua conta</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-80">
-        <input {...register("name")} placeholder="Nome" className="p-2 rounded bg-secondary text-text" />
-        <input {...register("email")} placeholder="Email" className="p-2 rounded bg-secondary text-text" />
-        <input {...register("password")} type="password" placeholder="Senha" className="p-2 rounded bg-secondary text-text" />
-        <button className="bg-accent py-2 rounded font-semibold hover:bg-opacity-80 transition">
-          Registrar
+  return (
+    <main className="auth">
+      <form onSubmit={handleSubmit(onSubmit)} className="card">
+        <h2>Criar Conta</h2>
+        <input placeholder="Nome" {...reg("name")} required />
+        <input placeholder="Email" type="email" {...reg("email")} required />
+        <input placeholder="Senha" type="password" {...reg("password")} required />
+        <button className="btn-primary" disabled={loading}>
+          {loading ? "Criando..." : "Cadastrar"}
         </button>
       </form>
-    </div>
-  )
+    </main>
+  );
 }

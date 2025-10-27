@@ -1,41 +1,26 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom"
-import { div } from "framer-motion/client";
+import { useAuth } from "../contexts/AuthContext";
 
-const schema = z.object({
-    email: z.string().email("Email inválido"),
-    password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
-})
+type Form = { email: string; password: string };
 
-export function Login() {
-    const { register, handleSubmit } = useForm({ resolver: zodResolver(schema) })
-    const navigate = useNavigate()
-    const auth = useContext(AuthContext)
+export default function Login() {
+  const { register: reg, handleSubmit } = useForm<Form>();
+  const { login, loading } = useAuth();
 
-    async function onSubmit(data: { email: string; password: string }) {
-        const ok = await auth.login(data.email, data.password)
-        if (ok) {
-            alert("Login realizado com sucesso!")
-            navigate("/dashboard")
-        } else {
-            alert("Credenciais inválidas ou erro na API.")
-        }
-    }
+  const onSubmit = async (data: Form) => {
+    await login(data.email, data.password);
+  };
 
-    return (
-        <div className="flex flex-col items-center justify-center h-screen text-center">
-            <h1 className="text-3xl font-bold mb-4">NexusVault</h1>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-80">
-                <input {...register("email")} placeholder="Email" className="p-2 rounded bg-secondary text-text" />
-                <input {...register("password")} type="password" placeholder="Senha" className="p-2 rounded bg-secondary text-text" />
-                <button className="bg-accent py-2 rounded font-semibold hover:bg-opacity-80 transition">
-                    Entrar
-                </button>
-            </form>
-        </div>
-    )
+  return (
+    <main className="auth">
+      <form onSubmit={handleSubmit(onSubmit)} className="card">
+        <h2>Entrar</h2>
+        <input placeholder="Email" type="email" {...reg("email")} required />
+        <input placeholder="Senha" type="password" {...reg("password")} required />
+        <button className="btn-primary" disabled={loading}>
+          {loading ? "Entrando..." : "Entrar"}
+        </button>
+      </form>
+    </main>
+  );
 }

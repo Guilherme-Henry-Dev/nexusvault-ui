@@ -1,61 +1,52 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import { Link } from "react-router-dom";
-import { useTheme } from "../hooks/useTheme"
 
-interface Game {
+type Game = {
   id: number;
   title: string;
-  genre: string;
-  platform: string;
-  rating: number;
-}
+  genre?: string;
+  platform?: string;
+  releaseYear?: number;
+};
 
-export function Dashboard() {
-  const { theme, toggle } = useTheme();
-  const [games, setGames] = useState<Game[]>([])
+export default function Dashboard() {
+  const [games, setGames] = useState<Game[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchGames() {
+    (async () => {
       try {
-        const res = await api.get("/games")
-        setGames(res.data)
-      } catch (err) {
-        console.error("Erro ao carregar jogos:", err)
+        const { data } = await api.get<Game[]>("/games");
+        setGames(data);
+      } finally {
+        setLoading(false);
       }
-    }
-    fetchGames()
-  }, [])
+    })();
+  }, []);
+
+  if (loading) {
+    return <div className="min-h-screen grid place-items-center text-slate-200">Carregando...</div>;
+  }
 
   return (
-    <div className="min-h-screen bg-primary text-text p-6">
+    <main className="min-h-screen bg-surface text-slate-100 p-6">
+      <header className="flex items-center justify-between max-w-6xl mx-auto mb-6">
+        <h1 className="text-2xl font-bold">Seus Jogos</h1>
+        <a href="/" className="btn-outline">Sair</a>
+      </header>
 
-      <button
-        onClick={toggle}
-        className="absolute top-6 right-6 bg-accent px-3 py-2 rounded text-sm font-semibold hover:bg-opacity-80 transition"
-      >
-        {theme === "dark" ? "☀️ Claro" : "🌙 Escuro"}
-      </button>
-
-      <h1 className="text-3xl font-bold mb-6">Minha Biblioteca</h1>
-      {games.length === 0 ? (
-        <p className="text-gray-400">Nenhum jogo cadastrado ainda.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {games.map((game) => (
-            <Link
-              key={game.id}
-              to={`/game/${game.id}`}
-              className="bg-secondary rounded-lg p-4 hover:bg-opacity-80 transition"
-            >
-              <h2 className="text-xl font-semibold mb-2">{game.title}</h2>
-              <p className="text-sm text-gray-300">Gênero: {game.genre}</p>
-              <p className="text-sm text-gray-300">Plataforma: {game.platform}</p>
-              <p className="text-sm text-gray-300">Nota: {game.rating}/10</p>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  )
+      <section className="grid max-w-6xl mx-auto gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {games.map((g) => (
+          <article key={g.id} className="card">
+            <h3 className="text-lg font-semibold">{g.title}</h3>
+            <p className="text-sm text-slate-300">{g.genre ?? "—"} · {g.platform ?? "—"}</p>
+            <p className="text-xs text-slate-400">Ano: {g.releaseYear ?? "—"}</p>
+          </article>
+        ))}
+        {games.length === 0 && (
+          <p className="text-slate-300">Nenhum jogo cadastrado ainda.</p>
+        )}
+      </section>
+    </main>
+  );
 }

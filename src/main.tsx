@@ -1,19 +1,13 @@
-import React from "react"
-import ReactDOM from "react-dom/client"
-import App from "./App"
-import { AuthProvider } from "./contexts/AuthContext"
-import "./styles/index.css"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.tsx";
+import "./styles/index.css";
 
-const rootElement = document.getElementById("root")
-
-if (!rootElement) {
-  throw new Error("Elemento root não encontrado no index.html")
-}
-
-ReactDOM.createRoot(rootElement).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
+    <BrowserRouter>
       <App />
-    </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
-)
+);

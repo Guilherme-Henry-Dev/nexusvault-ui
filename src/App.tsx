@@ -1,40 +1,29 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-import { Login } from "./pages/Login"
-import { Register } from "./pages/Register"
-import { Dashboard } from "./pages/DashBoard"
-import { GameDetails } from "./pages/GameDetails"
-import { Home } from "./pages/Home"
-import { useContext } from "react"
-import { AuthContext } from "./contexts/AuthContext"
-import type { JSX } from "react/jsx-runtime"
-import { AddGame } from "./pages/AddGame"
+import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import  Home  from "./pages/Home";
+import  Login  from "./pages/Login";
+import  Register  from "./pages/Register";
+import  Dashboard  from "./pages/DashBoard";
+import PrivateRoute from "./routes/PrivateRoute";
+import "./styles/index.css";
 
-function PrivateRoute({ children }: { children: JSX.Element }) {
-    const auth = useContext(AuthContext)
-    return auth?.user ? children : <Navigate to="/login" replace/>
+export default function App() {
+  return (
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+  );
 }
-
-export function App() {
-    return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/add-game" element={<AddGame />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/game/:id" element={<GameDetails />} />
-      </Routes>
-    </BrowserRouter>
-  )
-  
-}
-
-export default App

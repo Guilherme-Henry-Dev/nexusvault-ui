@@ -66,7 +66,7 @@ export default function AddGame() {
 
         <input
           type="text"
-          placeholder="Título"
+          placeholder="Título do Jogo"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"

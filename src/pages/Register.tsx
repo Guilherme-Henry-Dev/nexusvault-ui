@@ -1,26 +1,36 @@
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-type Form = { name: string; email: string; password: string };
-
 export default function Register() {
-  const { register: reg, handleSubmit } = useForm<Form>();
-  const { register: signup, loading } = useAuth();
+  const { signup } = useAuth();
+  const nav = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
-  const onSubmit = async (data: Form) => {
-    await signup(data.name, data.email, data.password);
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErr(null);
+    setSubmitting(true);
+    const ok = await signup(name, email, password);
+    setSubmitting(false);
+    if (ok) nav("/dashboard", { replace: true });
+    else setErr("Não foi possível criar a conta.");
   };
 
   return (
-    <main className="auth">
-      <form onSubmit={handleSubmit(onSubmit)} className="card">
-        <h2>Criar Conta</h2>
-        <input placeholder="Nome" {...reg("name")} required />
-        <input placeholder="Email" type="email" {...reg("email")} required />
-        <input placeholder="Senha" type="password" {...reg("password")} required />
-        <button className="btn-primary" disabled={loading}>
-          {loading ? "Criando..." : "Cadastrar"}
-        </button>
+    <main className="min-h-screen flex items-center justify-center bg-surface text-slate-100 px-4 sm:px-6">
+      <form onSubmit={onSubmit} className="w-full max-w-xs sm:max-w-sm md:max-w-md bg-black/20 p-6 sm:p-8 rounded-2xl shadow-lg border border-white/10">
+        <h1 className="text-2xl font-bold mb-6 text-center">Criar Conta</h1>
+        {err && <p className="text-red-400 text-sm mb-3">{err}</p>}
+        <input className="input mb-3" placeholder="Nome" value={name} onChange={e=>setName(e.target.value)} />
+        <input className="input mb-3" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
+        <input className="input mb-4" placeholder="Senha" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
+        <button className="btn-primary w-full text-sm sm:text-base py-2 sm:py-3" disabled={submitting}>{submitting ? "Cadastrando..." : "Cadastrar"}</button>
+        <a className="block text-center text-xs text-slate-400 mt-4 hover:text-slate-200 transition" href="/login">Já tenho conta</a>
       </form>
     </main>
   );

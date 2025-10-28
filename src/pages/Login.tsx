@@ -1,24 +1,47 @@
-import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
-
-type Form = { email: string; password: string };
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { register: reg, handleSubmit } = useForm<Form>();
-  const { login, loading } = useAuth();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = async (data: Form) => {
-    await login(data.email, data.password);
-  };
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      await login(form.email, form.password);
+      navigate("/dashboard");
+    } catch (err: any) {
+      console.error(err);
+      setError("Falha ao entrar. Verifique o e-mail e a senha.");
+    }
+  }
 
   return (
-    <main className="auth">
-      <form onSubmit={handleSubmit(onSubmit)} className="card">
-        <h2>Entrar</h2>
-        <input placeholder="Email" type="email" {...reg("email")} required />
-        <input placeholder="Senha" type="password" {...reg("password")} required />
-        <button className="btn-primary" disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
+    <main className="min-h-screen grid place-items-center bg-surface text-slate-100">
+      <form onSubmit={handleSubmit} className="card w-80 space-y-3">
+        <h1 className="text-lg font-bold text-center">Entrar</h1>
+        <input
+          type="email"
+          placeholder="Email"
+          className="input"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          className="input"
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+        />
+        {error && <p className="text-red-400 text-sm">{error}</p>}
+        <button type="submit" className="btn-primary w-full">
+          Entrar
         </button>
       </form>
     </main>

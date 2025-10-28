@@ -1,17 +1,40 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
+import ThemeToggle from "../components/ThemeToggle"
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-surface text-center text-slate-100 px-4 sm:px-6">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-4">Bem-vindo ao NexusVault</h1>
-      <p className="text-sm sm:text-base text-slate-400 mb-6 max-w-sm sm:max-w-md">
-        Organize seus jogos, acompanhe progresso e registre reviews — tudo em um só lugar.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Link to="/login" className="btn-primary">Acessar</Link>
-        <Link to="/register" className="btn-outline">Criar conta</Link>
+    <main className="min-h-screen flex items-center justify-center bg-surface text-slate-100 px-4 sm:px-6">
+      <div className="card w-full max-w-md text-center animate-fadeIn shadow-glow">
+        <header className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            Bem-vindo ao{" "}
+            <span className="text-primary drop-shadow-[0_0_8px_rgba(123,47,247,0.6)]">
+              NexusVault
+            </span>
+          </h1>
+          <ThemeToggle />
+        </header>
+
+        <p className="text-sm sm:text-base text-slate-400 mb-8 leading-relaxed">
+          Organize seus jogos, acompanhe progresso e registre reviews, tudo em
+          um só lugar.
+        </p>
+
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
+          <Link
+            to="/login"
+            className="btn-primary shadow-glow hover:shadow-[0_0_15px_rgba(123,47,247,0.8)]"
+          >
+            Acessar
+          </Link>
+          <Link
+            to="/register"
+            className="btn-outline hover:border-primary hover:text-primary transition"
+          >
+            Criar conta
+          </Link>
+        </div>
       </div>
     </main>
-
-  );
+  )
 }

@@ -3,61 +3,81 @@
 @tailwind utilities;
 
 :root {
+  --bg:        245 247 250;       
+  --surface:   255 255 255;       
+  --text:      26 32 44;          
+  --border:    203 213 224;       
+
   
-  --surface: 11 18 32;     
-  --primary: 124 58 237;    
-  --text: 226 232 240;     
-  --muted: 148 163 184;    
+  --primary:   123 47 247;        /* #7B2FF7 */
+  --secondary: 28 37 65;          /* #1C2541 */
+  --accent:    91 192 190;        /* #5BC0BE */
+  --highlight: 58 80 107;         /* #3A506B */
+  --danger:    239 71 111;        /* #EF476F */
+  --success:   6 214 160;         /* #06D6A0 */
 }
+
+
+:root.dark {
+  --bg:        11 19 43;          
+  --surface:   28 37 65;          
+  --text:      224 225 221;       
+  --border:    45 55 72;          
+
+  --primary:   123 47 247;        
+  --secondary: 28 37 65;
+  --accent:    91 192 190;
+  --highlight: 58 80 107;
+  --danger:    239 71 111;
+  --success:   6 214 160;
+}
+
 
 html, body, #root {
   height: 100%;
-  background-color: rgb(var(--surface));
+  background-color: rgb(var(--bg));
   color: rgb(var(--text));
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .bg-surface {
   background-color: rgb(var(--surface));
+  color: rgb(var(--text));
 }
 
-.shadow-soft {
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.35),
-    0 2px 6px rgba(0, 0, 0, 0.2);
-}
 
-.card {
+.card{
   width: 95%;
-  max-width: 28rem;             
-  background-color: rgb(var(--surface) / 0.7);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-radius: 1rem;          
-  padding: 1.5rem;             
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  max-width: 28rem;
+  background-color: rgb(var(--surface) / 0.9);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgb(var(--border) / 0.5);
   box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.35),
-    0 2px 6px rgba(0, 0, 0, 0.2);
+    0 10px 25px rgba(0, 0, 0, 0.25),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
 }
 
 
 .input {
   width: 100%;
-  border-radius: 0.5rem;       
-  padding: 0.5rem 0.75rem;     
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
   outline: none;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgb(var(--border) / 0.6);
+  background-color: rgb(var(--surface));
   color: rgb(var(--text));
+  transition: all 0.2s ease;
 }
-
 .input::placeholder {
-  color: rgb(var(--muted));
+  color: rgba(148, 163, 184, 1);
 }
-
 .input:focus {
-  box-shadow: 0 0 0 4px rgb(var(--primary) / 0.5);
-  border-color: rgb(var(--primary) / 0.6);
+  box-shadow: 0 0 0 3px rgb(var(--primary) / 0.3);
+  border-color: rgb(var(--primary));
 }
 
 
@@ -65,38 +85,35 @@ html, body, #root {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;       
-  padding: 0.9rem 1.5rem;         
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
   color: #fff;
-  background-color: rgb(var(--primary));
-  transition: filter 150ms ease, opacity 150ms ease, background-color 150ms ease;
-  text-decoration: none;
+  background-color: rgb(var(--primary)); 
   border: none;
+  transition: filter 150ms ease, opacity 150ms ease, background-color 150ms ease;
 }
-
 .btn-primary:hover {
-  filter: brightness(0.95);
+  filter: brightness(1.1);
+  box-shadow: 0 0 12px rgb(var(--primary) / 0.7);
 }
-
 .btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-
 .btn-outline {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;       
-  padding: 0.9rem 1.5rem;         
-  color: rgba(255, 255, 255, 0.9);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: rgb(var(--text));
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgb(var(--border));
   transition: background-color 150ms ease, color 150ms ease, opacity 150ms ease;
   text-decoration: none;
 }
-
 .btn-outline:hover {
-  background-color: rgb(var(--primary));
+  background-color: rgb(var(--primary) / 0.1);
+  border-color: rgb(var(--primary) / 0.5);
 }

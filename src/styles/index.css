@@ -2,27 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
-/* base layout helpers */
-.auth {
-  @apply min-h-screen grid place-items-center bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950;
+:root {
+  
+  --surface: 11 18 32;     
+  --primary: 124 58 237;    
+  --text: 226 232 240;     
+  --muted: 148 163 184;    
+}
+
+html, body, #root {
+  height: 100%;
+  background-color: rgb(var(--surface));
+  color: rgb(var(--text));
+}
+
+.bg-surface {
+  background-color: rgb(var(--surface));
+}
+
+.shadow-soft {
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .card {
-  @apply w-[95%] max-w-md bg-surface/70 backdrop-blur rounded-2xl p-6 shadow-soft border border-white/5;
+  width: 95%;
+  max-width: 28rem;             
+  background-color: rgb(var(--surface) / 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;          
+  padding: 1.5rem;             
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.card h2 {
-  @apply text-2xl font-bold text-white mb-4;
+
+.input {
+  width: 100%;
+  border-radius: 0.5rem;       
+  padding: 0.5rem 0.75rem;     
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgb(var(--text));
 }
 
-.card input {
-  @apply block w-full rounded-lg border border-white/10 bg-white/5 text-white placeholder:text-slate-400 px-3 py-2 mb-3 outline-none focus:ring-2 focus:ring-primary/60;
+.input::placeholder {
+  color: rgb(var(--muted));
 }
+
+.input:focus {
+  box-shadow: 0 0 0 4px rgb(var(--primary) / 0.5);
+  border-color: rgb(var(--primary) / 0.6);
+}
+
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 font-semibold text-white shadow-soft hover:opacity-95 active:opacity-90 transition;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;       
+  padding: 0.9rem 1.5rem;         
+  color: #fff;
+  background-color: rgb(var(--primary));
+  transition: filter 150ms ease, opacity 150ms ease, background-color 150ms ease;
+  text-decoration: none;
+  border: none;
 }
 
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
 .btn-outline {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-white hover:bg-white/5 transition;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;       
+  padding: 0.9rem 1.5rem;         
+  color: rgba(255, 255, 255, 0.9);
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  transition: background-color 150ms ease, color 150ms ease, opacity 150ms ease;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background-color: rgb(var(--primary));
 }

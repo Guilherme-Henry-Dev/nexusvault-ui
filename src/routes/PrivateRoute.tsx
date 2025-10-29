@@ -1,19 +1,16 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import type { JSX } from "react/jsx-runtime";
 
-function PrivateRoute() {
-  const { isAuthenticated, loading } = useAuth();
-  const location = useLocation();
 
-  if (loading) {
+export default function PrivateRoute({ children }: { children: JSX.Element }) {
+  const { token, initializing } = useAuth();
+
+  if (initializing) {
     return <div className="min-h-screen grid place-items-center text-slate-200">Carregando…</div>;
   }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
-
-  return <Outlet />;
+  return children
 }
-
-export default PrivateRoute;

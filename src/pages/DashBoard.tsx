@@ -51,7 +51,7 @@ export default function Dashboard() {
           <div className="flex gap-2 items-center justify-center sm:justify-end">
             <ThemeToggle />
             <button onClick={handleAddGame} className="btn-primary">Adicionar</button>
-            <a href="/" className="btn-outline">Sair</a>
+            <a onClick={logout} href="/" className="btn-outline">Sair</a>
           </div>
         </header>
 

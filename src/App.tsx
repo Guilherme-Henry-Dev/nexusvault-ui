@@ -5,7 +5,6 @@ import  Login  from "./pages/Login";
 import  Register  from "./pages/Register";
 import  AddGame  from "./pages/AddGame";
 import  Dashboard  from "./pages/DashBoard";
-import  PrivateRoute  from "./routes/PrivateRoute";
 import "./styles/index.css";
 
 export default function App() {

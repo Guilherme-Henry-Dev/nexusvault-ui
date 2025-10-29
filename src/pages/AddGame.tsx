@@ -1,53 +1,37 @@
 import { useState } from "react";
-import api from "../services/api";
+import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
+import api from "../services/api";
 
 export default function AddGame() {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("");
-  const [releaseYear, setReleaseYear] = useState("");
-  const [userRating, setUserRating] = useState("");
+  const [releaseYear, setReleaseYear] = useState<number | "">("");
+  const [userRating, setUserRating] = useState<number | "">("");
   const [userReview, setUserReview] = useState("");
   const [finishedAt, setFinishedAt] = useState("");
-  const [error, setError] = useState("");
+  const [error, setErr] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setError("");
-
+    setErr('');
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("Usuário não autenticado. Faça login novamente.");
-        return;
-      }
-
-      await api.post(
-        "/games",
-        {
-          title,
-          genre,
-          releaseYear: parseInt(releaseYear),
-          userRating: parseFloat(userRating),
-          userReview,
-          finishedAt: finishedAt ? new Date(finishedAt) : null,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      navigate("/dashboard");
-    } catch (err: any) {
-      console.error("Erro ao adicionar jogo:", err);
-      setError("Erro ao adicionar jogo. Verifique os dados e tente novamente.");
+      await api.post('/games', {
+        title,
+        genre: genre || undefined,
+        releaseYear: releaseYear === '' ? undefined : Number(releaseYear),
+        userRating: setUserRating || undefined,
+        review: setUserReview || undefined,
+        finishedAt: finishedAt || undefined,
+      });
+      navigate('/dashboard');
+    } catch (e: any) {
+      setErr(e?.response?.data?.error ?? 'Erro ao adicionar jogo');
     }
-  };
+  }
 
   return (
     <main className="min-h-screen bg-surface flex items-center justify-center text-slate-100 p-6">
@@ -57,7 +41,7 @@ export default function AddGame() {
           <ThemeToggle />
         </header>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={onSubmit}
           className="bg-[#161b27] p-8 rounded-xl shadow-lg w-96 space-y-4"
         >
 
@@ -89,7 +73,7 @@ export default function AddGame() {
             type="number"
             placeholder="Ano de lançamento"
             value={releaseYear}
-            onChange={(e) => setReleaseYear(e.target.value)}
+            onChange={e=>setReleaseYear(e.target.value ? Number(e.target.value) : '')}
             className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
             required
           />
@@ -101,7 +85,7 @@ export default function AddGame() {
             max="10"
             step="0.1"
             value={userRating}
-            onChange={(e) => setUserRating(e.target.value)}
+            onChange={e=>setReleaseYear(e.target.value ? Number(e.target.value) : '')}
             className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
           />
 

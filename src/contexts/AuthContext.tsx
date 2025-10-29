@@ -1,66 +1,67 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import api from "../services/api";
 
+type User = { id: number; name: string; email: string };
 type AuthContextType = {
-  isAuthenticated: boolean;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  signup: (name: string, email: string, password: string) => Promise<boolean>;
+  user: User | null;
+  token: string | null;
+  initializing: boolean;
+  signup: (data: { name: string; email: string; password: string }) => Promise<void>;
+  login: (data: { email: string; password: string }) => Promise<void>;
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType>({} as any);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [loading, setLoading] = useState(true);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
-    const t = localStorage.getItem("token");
-    if (t) setToken(t);
-    setLoading(false);
+    const t = localStorage.getItem('@nexusvault:token');
+    if (t) {
+      setToken(t);
+      api.get<User>('/auth/me')
+        .then((r) => setUser(r.data))
+        .catch(() => {
+          localStorage.removeItem('@nexusvault:token');
+          setUser(null);
+          setToken(null);
+        })
+        .finally(() => setInitializing(false));
+    } else {
+      setInitializing(false);
+    }
+
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    try {
-      const { data } = await api.post<{ token: string }>("/auth/login", { email, password });
-      localStorage.setItem("token", data.token);
-      setToken(data.token);
-      return true;
-    } catch {
-      return false;
-    }
-  }, []);
+  async function signup(data: { name: string; email: string; password: string }) {
+    await api.post('/auth/register', data);
+    await login({ email: data.email, password: data.password });
+  }
 
-  const signup = useCallback(async (name: string, email: string, password: string) => {
-    try {
-      await api.post("/auth/register", { name, email, password });
-      const ok = await login(email, password);
-      return ok;
-    } catch {
-      return false;
-    }
-  }, [login]);
+  async function login(data: { email: string; password: string }) {
+    const r = await api.post<{ token: string; user: User }>('/auth/login', data);
+    localStorage.setItem('@nexusvault:token', r.data.token);
+    setToken(r.data.token);
+    setUser(r.data.user);
+  }
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("token");
+  function logout() {
+    localStorage.removeItem('@nexusvault:token');
+    setUser(null);
     setToken(null);
-  }, []);
+  }
 
-  const value = useMemo<AuthContextType>(() => ({
-    isAuthenticated: !!token,
-    loading,
-    login,
-    signup,
-    logout,
-  }), [token, loading, login, signup, logout]);
+  return (
+    <AuthContext.Provider value={{ user, token, initializing, signup, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth deve ser usado dentro de AuthProvider");
-  return ctx;
-};
+export function useAuth() {
+  return useContext(AuthContext);
+}
 

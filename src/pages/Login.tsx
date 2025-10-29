@@ -1,35 +1,34 @@
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import type { FormEvent } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import ThemeToggle from "../components/ThemeToggle";
 
 export default function Login() {
-  const { login } = useAuth();
   const nav = useNavigate();
-  const location = useLocation();
-  const from = (location.state as any)?.from?.pathname ?? "/dashboard";
+  const { login } = useAuth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [err, setErr] = useState('');
 
-  const onSubmit = async (e: React.FormEvent) => {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setErr(null);
-    setSubmitting(true);
-    const ok = await login(email, password);
-    setSubmitting(false);
-    if (ok) nav(from, { replace: true });
-    else setErr("Credenciais inválidas.");
-  };
+    setErr('');
+    try {
+      await login({ email, password });
+      nav('/dashboard');
+    } catch (e: any) {
+      setErr(e?.response?.data?.error ?? 'Falha no login');
+    }
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-surface text-slate-100 px-4 sm:px-6">
       <div className="card w-full max-w-md animate-fadeIn">
         <header className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary drop-shadow-[0_0_6px_rgba(123,47,247,0.7)]">
-            Entrar
+          <h1 className="text-2xl sm:text-3xl font-bold drop-shadow-[0_0_6px_rgba(123,47,247,0.7)]">
+            Login
           </h1>
           <ThemeToggle />
         </header>
@@ -50,12 +49,7 @@ export default function Login() {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-          <button
-            className="btn-primary w-full text-sm sm:text-base py-2 sm:py-3 shadow-glow"
-            disabled={submitting}
-          >
-            {submitting ? "Entrando..." : "Entrar"}
-          </button>
+          <button className="btn-primary w-full text-sm sm:text-base py-2 sm:py-3 shadow-glow">Entrar</button>
         </form>
 
         <p className="text-lg  text-center text-slate-400 mt-4">

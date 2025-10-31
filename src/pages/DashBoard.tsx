@@ -67,6 +67,8 @@ export default function Dashboard() {
               <h3 className="text-lg font-semibold">{g.title}</h3>
               <p className="text-sm text-slate-300">{g.genre ?? "—"} · {g.platform ?? "—"}</p>
               <p className="text-xs text-slate-400">Ano: {g.releaseYear ?? "—"}</p>
+              <p className="text-xs text-slate-400">Nota: {g.userRating ?? "—"}</p>
+              <p className="text-xs text-slate-400">Review: {g.userReview ?? "—"}</p>
             </motion.article>
           ))}
         </section>

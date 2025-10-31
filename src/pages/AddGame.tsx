@@ -9,6 +9,7 @@ export default function AddGame() {
 
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("");
+  const [platform, setPlatform] = useState("")
   const [releaseYear, setReleaseYear] = useState<number | "">("");
   const [userRating, setUserRating] = useState<number | "">("");
   const [userReview, setUserReview] = useState("");
@@ -22,6 +23,7 @@ async function onSubmit(e: FormEvent) {
       await api.post('/games', {
         title,
         genre: genre || undefined,
+        platform: platform || undefined,
         releaseYear: releaseYear === '' ? undefined : Number(releaseYear),
         userRating: userRating === '' ? undefined : Number(userRating),
         userReview: userReview || undefined,
@@ -64,6 +66,15 @@ async function onSubmit(e: FormEvent) {
             type="text"
             placeholder="Gênero"
             value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+            className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
+            required
+          />
+          
+          <input
+            type="text"
+            placeholder="Plataforma"
+            value={platform}
             onChange={(e) => setGenre(e.target.value)}
             className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
             required

@@ -48,7 +48,7 @@ async function onSubmit(e: FormEvent) {
         </header>
         <form
           onSubmit={onSubmit}
-          className="bg-[#161b27] p-8 rounded-xl shadow-lg w-96 space-y-4"
+          className="bg-[#161b27] p-8 rounded-xl shadow-lg w-full max-w-md space-y-4"
         >
 
           {error && (

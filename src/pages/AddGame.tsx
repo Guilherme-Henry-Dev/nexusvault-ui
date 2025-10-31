@@ -43,7 +43,7 @@ async function onSubmit(e: FormEvent) {
     >
       <div className="card w-full max-w-md animate-fadeIn">
         <header className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-bold text-light-primary">Adicionar Novo Jogo</h1>
+          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Adicionar Novo Jogo</h1>
           <ThemeToggle />
         </header>
         <form

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
 import ThemeToggle from "../components/ThemeToggle";
+import bgdashboard from "../assets/bg/background-dashboard.png"
+
 
 
 type Game = {
@@ -39,12 +41,14 @@ export default function Dashboard() {
   if (loading) return <div className="min-h-screen grid place-items-center text-slate-200">Carregando...</div>;
 
   return (
-    <main className="min-h-screen bg-surface text-slate-100 p-4 sm:p-6 md:p-8">
+    <main className="min-h-screen bg-surface text-slate-100 p-4 sm:p-6 md:p-8 bg-cover bg-center bg-no-repeat transition-all duration-300"
+    style={{ backgroundImage: `url(${bgdashboard})`}}
+    >
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen bg-surface text-slate-100 p-4 sm:p-6 md:p-8"
+        className="min-h-screen text-slate-100 p-4 sm:p-6 md:p-8"
       >
         <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 max-w-6xl mx-auto mb-6">
           <h1 className="text-2xl font-bold text-center sm:text-left">Seus Jogos</h1>

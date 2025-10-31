@@ -3,6 +3,8 @@ import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import api from "../services/api";
+import bgaddgame from "../assets/bg/background-addgame.png"
+
 
 export default function AddGame() {
   const navigate = useNavigate();
@@ -36,10 +38,12 @@ async function onSubmit(e: FormEvent) {
   }
 
   return (
-    <main className="min-h-screen bg-surface flex items-center justify-center text-slate-100 p-6">
+    <main className="min-h-screen flex items-center justify-center text-slate-100 p-6 bg-cover bg-center bg-no-repeat transition-all duration-300"
+    style={{ backgroundImage: `url(${bgaddgame})` }}
+    >
       <div className="card w-full max-w-md animate-fadeIn">
         <header className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-bold">Adicionar Novo Jogo</h1>
+          <h1 className="text-xl font-bold text-light-primary">Adicionar Novo Jogo</h1>
           <ThemeToggle />
         </header>
         <form

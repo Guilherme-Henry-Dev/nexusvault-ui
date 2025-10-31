@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom"
 import ThemeToggle from "../components/ThemeToggle"
+import bghero from "../assets/bg/background-home.png"
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-surface text-slate-100 px-4 sm:px-6">
+    <main className="min-h-screen flex items-center justify-center text-slate-100 px-4 sm:px-6 bg-cover bg-center bg-no-repeat transition-all duration-300"
+      style={{ backgroundImage: `url(${bghero})` }}
+    >
       <div className="card w-full max-w-md text-center animate-fadeIn shadow-glow">
         <header className="flex items-center justify-center mb-6 pl-9 pr-1">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
             Bem-vindo ao{" "}
             <span className="drop-shadow-[0_0_8px_rgba(123,47,247,0.6)]">
               NexusVault
@@ -15,7 +18,7 @@ export default function Home() {
           <ThemeToggle />
         </header>
 
-        <p className="text-sm sm:text-base text-slate-400 mb-8 leading-relaxed">
+        <p className="text-sm sm:text-base text-gray-600 mb-8 leading-relaxed">
           Organize seus jogos, acompanhe progresso e registre reviews, tudo em
           um só lugar.
         </p>

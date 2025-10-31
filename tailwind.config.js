@@ -4,8 +4,12 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      backgroundImage: {
+        'hero-gaming': "url('/src/assets/bg/background-home.png')",
+        'add-gaming': "url('/src/assets/bg/background-addgame.png')",
+        'dashboard-gaming': "url('/src/assets/bg/background-dashboard.png')",
+      },
       colors: {
-
         primary: "#7B2FF7",
         secondary: "#1C2541",
         accent: "#5BC0BE",
@@ -14,17 +18,15 @@ export default {
         danger: "#EF476F",
         success: "#06D6A0",
 
-
         light: {
-          background: "#F5F7FA", 
+          background: "#F5F7FA",
           surface: "#FFFFFF",
-          text: "#1A202C", 
-          border: "#CBD5E0", 
-          primary: "#7B2FF7", 
+          text: "#1A202C",
+          border: "#CBD5E0",
+          primary: "#7B2FF7",
           accent: "#5BC0BE",
         },
 
-        // 🌙 Tema escuro
         dark: {
           background: "#0B132B",
           surface: "#1C2541",
@@ -62,7 +64,7 @@ export default {
     },
   },
   plugins: [
- 
+
     function ({ addVariant }) {
       addVariant("light", ".light &");
       addVariant("dark", ".dark &");

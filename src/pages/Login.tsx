@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import ThemeToggle from "../components/ThemeToggle";
+import bghero from "../assets/bg/background-home.png"
 
 export default function Login() {
   const nav = useNavigate();
@@ -24,7 +25,8 @@ export default function Login() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-surface text-slate-100 px-4 sm:px-6">
+    <main className="min-h-screen flex items-center justify-center px-4 sm:px-6  bg-cover bg-center bg-no-repeat transition-all duration-300"
+    style={{ backgroundImage: `url(${bghero})` }}>
       <div className="card w-full max-w-md animate-fadeIn">
         <header className="flex items-center justify-between mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold drop-shadow-[0_0_6px_rgba(123,47,247,0.7)]">
@@ -52,7 +54,7 @@ export default function Login() {
           <button className="btn-primary w-full text-sm sm:text-base py-2 sm:py-3 shadow-glow">Entrar</button>
         </form>
 
-        <p className="text-lg  text-center text-slate-400 mt-4">
+        <p className="text-lg  text-center text-gray-600 mt-4">
           Ainda não tem conta? {" "}
           <Link
             to="/register"

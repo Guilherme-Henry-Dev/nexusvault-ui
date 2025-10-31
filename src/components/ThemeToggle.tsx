@@ -7,7 +7,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg border border-white/10 hover:bg-white/5 transition"
+      className="p-2 rounded-lg border border-white/10  bg-primary"
       title={darkMode ? "Modo claro" : "Modo escuro"}
     >
       {darkMode ? <Sun size={30} /> : <Moon size={30} />}

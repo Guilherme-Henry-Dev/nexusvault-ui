@@ -24,7 +24,7 @@ async function onSubmit(e: FormEvent) {
         genre: genre || undefined,
         releaseYear: releaseYear === '' ? undefined : Number(releaseYear),
         userRating: userRating === '' ? undefined : Number(userRating),
-        review: userReview || undefined,
+        reviews: userReview || undefined,
         finishedAt: finishedAt || undefined,
       });
       navigate('/dashboard');

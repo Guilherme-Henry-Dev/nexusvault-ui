@@ -75,7 +75,7 @@ async function onSubmit(e: FormEvent) {
             type="text"
             placeholder="Plataforma"
             value={platform}
-            onChange={(e) => setGenre(e.target.value)}
+            onChange={(e) => setPlatform(e.target.value)}
             className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
             required
           />

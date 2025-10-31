@@ -68,11 +68,11 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1, duration: 0.3 }}
             >
-              <h3 className="text-lg font-semibold">{g.title}</h3>
-              <p className="text-sm text-slate-300">{g.genre ?? "—"} · {g.platform ?? "—"}</p>
-              <p className="text-xs text-slate-400">Ano: {g.releaseYear ?? "—"}</p>
-              <p className="text-xs text-slate-400">Nota: {g.userRating ?? "—"}</p>
-              <p className="text-xs text-slate-400">Review: {g.userReview ?? "—"}</p>
+              <h3 className="text-lg font-semibold pb-1 text-slate-900 dark:text-slate-100 text-shadow">{g.title}</h3>
+              <p className="text-sm text-slate-700 dark:text-slate-300">{g.genre ?? ""} · {g.platform ?? ""}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">Ano: {g.releaseYear ?? "—"}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">Nota: {g.userRating ?? "Não foi avaliado"}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">Review: {g.userReview ?? "Não há reviews"}</p>
             </motion.article>
           ))}
         </section>

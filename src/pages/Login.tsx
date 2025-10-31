@@ -29,7 +29,7 @@ export default function Login() {
     style={{ backgroundImage: `url(${bghero})` }}>
       <div className="card w-full max-w-md animate-fadeIn">
         <header className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold drop-shadow-[0_0_6px_rgba(123,47,247,0.7)]">
+          <h1 className="text-2xl sm:text-3xl font-bold drop-shadow-[0_0_6px_rgba(123,47,247,0.7)] text-slate-900 dark:text-slate-100">
             Login
           </h1>
           <ThemeToggle />
@@ -54,11 +54,11 @@ export default function Login() {
           <button className="btn-primary w-full text-sm sm:text-base py-2 sm:py-3 shadow-glow">Entrar</button>
         </form>
 
-        <p className="text-lg  text-center text-gray-600 mt-4">
+        <p className="text-lg  text-center text-slate-900 dark:text-slate-100 mt-4">
           Ainda não tem conta? {" "}
           <Link
             to="/register"
-            className="text-slate-400 hover:underline hover:text-primary/80"
+            className="text-slate-900 dark:text-slate-100 hover:underline hover:text-primary/80"
           >
           Crie uma agora
           </Link>

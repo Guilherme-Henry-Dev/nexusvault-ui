@@ -9,7 +9,7 @@ export default function Home() {
     >
       <div className="card w-full max-w-md text-center animate-fadeIn shadow-glow">
         <header className="flex items-center justify-center mb-6 pl-9 pr-1">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
             Bem-vindo ao{" "}
             <span className="drop-shadow-[0_0_8px_rgba(123,47,247,0.6)]">
               NexusVault
@@ -18,7 +18,7 @@ export default function Home() {
           <ThemeToggle />
         </header>
 
-        <p className="text-sm sm:text-base text-gray-600 mb-8 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-900 dark:text-slate-100 mb-8 leading-relaxed">
           Organize seus jogos, acompanhe progresso e registre reviews, tudo em
           um só lugar.
         </p>

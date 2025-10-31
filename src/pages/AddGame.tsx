@@ -23,8 +23,8 @@ async function onSubmit(e: FormEvent) {
         title,
         genre: genre || undefined,
         releaseYear: releaseYear === '' ? undefined : Number(releaseYear),
-        userRating: setUserRating || undefined,
-        review: setUserReview || undefined,
+        userRating: userRating === '' ? undefined : Number(userRating),
+        review: userReview || undefined,
         finishedAt: finishedAt || undefined,
       });
       navigate('/dashboard');
@@ -85,7 +85,7 @@ async function onSubmit(e: FormEvent) {
             max="10"
             step="0.1"
             value={userRating}
-            onChange={e=>setReleaseYear(e.target.value ? Number(e.target.value) : '')}
+            onChange={e=>setUserRating(e.target.value ? Number(e.target.value) : '')}
             className="w-full p-2 rounded bg-[#1f2638] focus:outline-none"
           />
 
